@@ -1,0 +1,56 @@
+name: Print Software Versions
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  processing-layer:
+    name: Processing layer software versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show runner info
+        run: |
+          echo "Runner:"
+          uname -a
+          lsb_release -a || true
+
+      - name: Node & npm
+        run: |
+          node --version || echo "node missing"
+          npm --version || echo "npm missing"
+
+      - name: Python
+        run: |
+          python3 --version || true
+          pip3 --version || true
+
+      - name: Java
+        run: |
+          java -version || true
+          javac -version || true
+
+      - name: .NET SDK
+        run: |
+          dotnet --info || true
+
+  data-access-layer:
+    name: Data access layer (DBMS) versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker info
+        run: docker --version
+
+      - name: PostgreSQL versions
+        run: |
+          docker run --rm postgres:16 psql --version
+          docker run --rm postgres:16 postgres --version
+
+      - name: MySQL versions
+        run: |
+          docker run --rm mysql:8 mysql --version
+          docker run --rm mysql:8 mysqld --version
+
+      - name: MongoDB version
+        run: |
+          docker run --rm mongo:7 mongod --version
