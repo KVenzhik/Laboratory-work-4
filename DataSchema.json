@@ -9,21 +9,16 @@
   "properties": {
     "id": {
       "type": "integer",
-      "minimum": 1
+      "minimum": -5
     },
     "code": {
       "type": "string",
-      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      "pattern": "^[A-Z]+$"
     },
     "title": {
       "type": "string",
-      "minLength": 1,
-      "maxLength": 160
-    },
-    "created_at": {
-      "type": "string",
-      "format": "date"
+      "maxLength": 1
     }
   },
-  "additionalProperties": false
+  "additionalProperties": true
 }
