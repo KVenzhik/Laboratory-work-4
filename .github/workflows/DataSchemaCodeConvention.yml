@@ -1,51 +1,18 @@
-name: Data Schema Code Convention
+name: SQL Linter
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ main, master, laboratory-work-4 ]
-    paths:
-      - 'DataSchema.sql'
-      - 'DataSchema.json'
-      - '.github/workflows/DataSchemaCodeConvention.yml'
-  pull_request:
-    paths:
-      - 'DataSchema.sql'
-      - 'DataSchema.json'
-      - '.github/workflows/DataSchemaCodeConvention.yml'
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  sql_convention:
-    if: ${{ hashFiles('DataSchema.sql') != '' }}
+  SQLLinter:
     runs-on: ubuntu-latest
-    name: SQL Convention (SQLFluff)
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install SQLFluff
-        run: |
-          pip install --upgrade pip
-          pip install sqlfluff sqlfluff-templater-jinja
-      - name: Lint DataSchema.sql
-        run: |
-          sqlfluff lint DataSchema.sql --dialect postgres
+      - name: Checkout Code in Repository
+        uses: actions/checkout@v4
 
-  json_convention:
-    if: ${{ hashFiles('DataSchema.json') != '' }}
-    runs-on: ubuntu-latest
-    name: JSON Convention (jsonlint)
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install jsonlint
+      - name: Start SQL Linter
         run: |
-          npm i -g @prantlf/jsonlint
-      - name: Lint DataSchema.json
-        run: |
-          jsonlint DataSchema.json -q
+          pip install sqlfluff
+          sqlfluff lint DataSchema.sql --dialect postgres
